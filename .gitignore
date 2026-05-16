@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+target/
+.venv/
+.mypy_cache/
+/target/
+/Model/

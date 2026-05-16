@@ -1,0 +1,88 @@
+[workspace]
+
+members = [
+
+    "crates/hakos-abi",
+
+    "crates/hakos-boot",
+
+    "crates/hakos-hal",
+
+    "crates/hakos-arch-x86_64",
+
+    "crates/hakos-drivers",
+
+    "crates/hakos-ipc",
+    "crates/hakos-security",
+    "crates/hakos-power",
+    "crates/hakos-fs",
+
+    "crates/hakos-net",
+
+    "crates/hakos-runtime",
+    "crates/hakos-compat",
+    "crates/hakos-desktop",
+    "crates/hakos-ai-core",
+    "crates/hakos-nl-shell",
+    "crates/hakos-userland",
+
+    "crates/hakos-kernel",
+
+]
+
+resolver = "2"
+
+
+
+[workspace.package]
+
+edition = "2021"
+
+license = "MIT"
+
+authors = ["HakOS"]
+
+version = "0.1.0"
+
+
+
+[workspace.dependencies]
+
+hakos-abi = { path = "crates/hakos-abi" }
+
+hakos-boot = { path = "crates/hakos-boot" }
+
+hakos-hal = { path = "crates/hakos-hal" }
+
+hakos-arch-x86_64 = { path = "crates/hakos-arch-x86_64" }
+
+hakos-drivers = { path = "crates/hakos-drivers" }
+
+hakos-ipc = { path = "crates/hakos-ipc" }
+hakos-security = { path = "crates/hakos-security" }
+hakos-power = { path = "crates/hakos-power" }
+hakos-fs = { path = "crates/hakos-fs" }
+
+hakos-net = { path = "crates/hakos-net" }
+
+hakos-runtime = { path = "crates/hakos-runtime" }
+hakos-compat = { path = "crates/hakos-compat" }
+hakos-desktop = { path = "crates/hakos-desktop" }
+hakos-ai-core = { path = "crates/hakos-ai-core" }
+hakos-nl-shell = { path = "crates/hakos-nl-shell" }
+hakos-userland = { path = "crates/hakos-userland" }
+
+
+
+[profile.dev]
+
+panic = "abort"
+
+
+
+[profile.release]
+
+panic = "abort"
+
+lto = true
+
