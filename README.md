@@ -1,72 +1,206 @@
-HakOS
+# HakOS
 
-An operating system built around a simple idea: you shouldn't need a terminal to talk to your computer. Natural language is the shell. The AI runs on your own hardware. No cloud, no keys, no subscriptions.
+[![Status](https://img.shields.io/badge/status-concept%20%2F%20early%20dev-orange)]()
+[![Build Status](https://img.shields.io/badge/build-not%20configured-lightgrey)]()
+[![Test Coverage](https://img.shields.io/badge/coverage-N%2FA-lightgrey)]()
+[![Latest Version](https://img.shields.io/badge/version-0.0.1--dev-blue)]()
+[![Downloads](https://img.shields.io/badge/downloads-0-lightgrey)]()
+[![License](https://img.shields.io/badge/license-MIT-green)]()
+[![Kernel](https://img.shields.io/badge/kernel-Rust-orange)]()
+[![AI](https://img.shields.io/badge/AI-Qwen2.5%201B%20%2F%203B-blue)]()
+[![Platform](https://img.shields.io/badge/platform-x86__64-lightgrey)]()
 
-This is an early-stage project. The kernel is being written in Rust. Most of the stack is built from scratch. Target audience: developers who want their machine to understand what they mean, not just what they type.
-
----
-
-What it does
-
-You open a launcher or a terminal, type something like:
-
-```
-open websize and run
-```
-
-HakOS scans every disk, finds the folder called websize, checks what kind of project it is (Node, Python, whatever), and runs the right dev command. If it finds more than one match, it asks which one you meant. No manual cd, no ls, no package.json inspection.
-
-All of that happens on-device. The language model is embedded in the OS (around 1B parameters by default; a 3B variant is available if you have more RAM). Nothing is sent to the internet.
+> An AI-native operating system built for developers. Natural language is the shell.  
+> The AI runs on your machine. No API keys. No subscription. No cloud.
 
 ---
 
-Stack overview (bottom to top)
+## What is HakOS?
 
-```
-[ Natural language shell ]
-[ Embedded AI (1B/3B model) ]
-[ Compositor & desktop ]
-[ Linux ELF compat layer ]
-[ Language runtimes ]
-[ HakFS + TCP/IP stack ]
-[ IPC, security, boot ]
-[ Hardware drivers ]
-[ Kernel (Rust) ]
+**HakOS** is an operating system designed from the ground up for developers – with AI as a first-class citizen at every layer of the stack.
+
+You don't type cryptic commands. You say what you want:
+
+```bash
+> open websize and run
 ```
 
-Each of these is being built as part of the OS. There's no Linux kernel underneath, no GNU userland. The filesystem, network stack, drivers, bootloader—all custom.
+HakOS searches your entire disk, finds the project named `websize`, detects it's a Node.js project, and runs `npm run dev` – automatically. If multiple matches exist, it lists them and lets you pick.
+
+The AI that powers this runs fully **on-device** using embedded Qwen2.5 models. No internet connection. No API key. No subscription.
 
 ---
 
-What's inside
+## Core Philosophy
 
-- The shell is a natural language interface, but you can also drop into a regular terminal when you want.
-- A GPU-accelerated compositor (target is 60fps). Window management is a mix of tiling and floating.
-- HakFS — a journaled file system designed from scratch for this OS. Not ext4, not something borrowed.
-- TCP/IP stack written in-house. No lwIP, no existing net stack.
-- Linux ELF compatibility — so you can still run VSCode, Docker CLI, Git, and other tools without waiting for native ports.
-- .hak packages — double-click an archive and it installs. No wizards, no "Are you sure?" prompts.
-- Archive support for all common formats (zip, tar.*, 7z, rar, iso, etc.) — double-click extracts in place.
-- System settings with the usual suspects: display, network, audio, users, keyboard. AI model can be toggled between 1B and 3B in a dropdown.
+- **For developers, by a developer** – No printer support, no parental controls, no bloat.
+- **AI is the shell** – Natural language replaces the command line as the primary interface.
+- **On-device AI only** – Your commands and project names never leave your machine.
+- **Minimal but complete** – Everything a developer needs, nothing they don't.
+- **Self‑developed stack** – Custom bootloader, kernel, drivers, filesystem, network stack – all written in Rust from scratch.
 
 ---
 
-Hardware goals
+## Status
 
-Aiming for x86_64 initially. Intel and AMD CPUs. Graphics support for Intel iGPU, AMD, and NVIDIA (yeah, that one's going to hurt). NVMe and SATA. A handful of common NICs and USB HID devices. Not trying to support everything. If it runs on a typical dev laptop or desktop, it should work.
+> ⚠️ **HakOS is currently in early concept / design phase.**  
+> The repository contains the full design documentation and a working Rust scaffolding (crates, data structures, trait definitions).  
+> The goal is to evolve this into a bootable, usable developer OS step by step, with heavy AI assistance.
 
----
-
-Build status & license
-
-Concept / early development. Nothing production-ready. If you want to help, issues and PRs are open.
-
-License: MIT. Use it, fork it, break it, fix it.
+See [`DESIGN.md`](DESIGN.md) for the complete architecture and roadmap.
 
 ---
 
-Why this exists
+## Architecture (planned)
 
-Most operating systems treat natural language as a layer on top of something older. HakOS inverts that: the AI is part of the boot image, and the shell is an LLM. The goal isn't to replace terminals, it's to stop treating memorized commands as a prerequisite for development workflows.
+```
+┌──────────────────────────────────────────────┐
+│         L8  Natural Language Shell           │
+│  Project search · Lang detect · Auto command │
+├──────────────────────────────────────────────┤
+│     L7  Embedded AI Core (Qwen2.5 1B/3B)     │
+│  On-device · 100+ languages · No API key     │
+├──────────────────────────────────────────────┤
+│       L6  GUI Compositor + Desktop           │
+│  GPU-accelerated · 60fps · Developer-first   │
+├──────────────────────────────────────────────┤
+│      L5  Software Compatibility Layer        │
+│  Native .hak packages · No Linux binary mess │
+├──────────────────────────────────────────────┤
+│        L4  Language Runtime Layer            │
+│  Python · Node · Go · JVM · Ruby · Swift ... │
+├──────────────────────────────────────────────┤
+│         L3  HakFS + Network Stack            │
+│  Self-developed FS · Full TCP/IP from scratch│
+├──────────────────────────────────────────────┤
+│      L2  IPC / Security / Power / Boot       │
+│  Self-written bootloader · ACPI · Sandbox    │
+├──────────────────────────────────────────────┤
+│       L1  Hardware Drivers (self-developed)  │
+│  Intel/AMD/NVIDIA GPU · NVMe · NIC · USB     │
+├──────────────────────────────────────────────┤
+│          L0  HakOS Kernel Core (Rust)        │
+│  Memory · Scheduler · IRQ · SMP · Timers     │
+└──────────────────────────────────────────────┘
+```
 
-One developer. Some help from local models during design and code generation. No company, no cloud dependency, no data collection.
+> 📄 Full architecture details: [`DESIGN.md`](DESIGN.md)
+
+---
+
+## Features (design – in progress)
+
+| Area | Planned capabilities |
+|------|----------------------|
+| **Natural Language Shell** | Intent parsing, project detection, multi-match disambiguation, NL scripting |
+| **Desktop Environment** | GPU compositor, tiling+floating WM, multi‑monitor, gestures, hotkeys |
+| **Terminal** | GPU‑accelerated, tabs, split panes, session restore |
+| **Filesystem** | HakFS – journaled, extent‑based, inline small files, snapshots (future) |
+| **Network Stack** | Full TCP/IP from scratch, TLS 1.3, DNS, DHCP, WiFi supplicant |
+| **Language Runtimes** | Python, Node, Go, Rust, JVM, Ruby, Swift, R, Julia, Lua, PHP, Dart, Haskell, Elixir, Zig … |
+| **Package Management** | `.hak` native packages, silent install, permission prompts only on escalation |
+| **AI on device** | Qwen2.5‑1B / 3B, local inference, context engine, search engine, speculative prefetch |
+| **Settings UI** | Full developer‑focused control panel (see DESIGN.md §4) |
+
+---
+
+## Natural Language Shell – How It Works
+
+```text
+User:  "open websize and run"
+                  ↓
+    AI parses intent + entity
+    intent=open_and_run  project=websize
+                  ↓
+    Search entire disk for "websize"
+                  ↓
+    Single match found
+    ├── Detect language → Node.js (package.json found)
+    ├── Map "run" → npm run dev
+    └── Execute in terminal
+                  ↓
+    Multiple matches found
+    ├── [1] ~/projects/websize (Node.js)
+    ├── [2] ~/archive/websize-old (Node.js)
+    └── Which one? >
+```
+
+### Action mapping examples
+
+| You say | Project type | Command executed |
+|---|---|---|
+| `open websize and run` | Node.js | `npm run dev` |
+| `open server and run` | Python | `python main.py` |
+| `open app and build` | Rust | `cargo build` |
+| `open service and test` | Go | `go test ./...` |
+| `open api and run` | Java/Maven | `mvn spring-boot:run` |
+| `open project and deploy` | Docker | `docker compose up` |
+
+---
+
+## Embedded AI Models (on‑device)
+
+Both models are pre‑installed on the HakOS image. Switch instantly in Settings → AI Settings. No download required.
+
+| Model | RAM usage | Speed | Recommended for |
+|---|---|---|---|
+| Qwen2.5‑1B (INT4/INT8) | ~800 MB | Very fast | Low‑spec devices, simple commands |
+| Qwen2.5‑3B (INT4/INT8) | ~2 GB | Fast | Default – better accuracy |
+
+---
+
+## Getting Started (for contributors)
+
+This repository currently contains the **design documentation and Rust scaffolding**. To explore the codebase:
+
+```bash
+git clone https://github.com/snowphn/HakOS.git
+cd HakOS
+cargo build --workspace
+```
+
+To see the full design and roadmap: open [`DESIGN.md`](DESIGN.md).
+
+> **Note:** The codebase is under active construction. Most modules are still skeletons or `todo!()` stubs – they define the API shape but are not yet executable.  
+> The next phase is to replace stubs with real implementations, one small function at a time, using AI assistance.
+
+---
+
+## Roadmap (high‑level)
+
+| Phase | Focus | Target |
+|-------|-------|--------|
+| **1** | NL Shell prototype (on existing OS) | Validating the concept |
+| **2** | Kernel bootstrap (bootloader, memory, interrupts) | Boot to `HakOS` message |
+| **3** | Usable core (HakFS, network stack, drivers) | Boot to shell, run native `.hak` apps |
+| **4** | Desktop (compositor, WM, apps) | Graphical desktop |
+| **5** | Full integration (AI, all runtimes, public alpha) | First public release |
+
+Detailed timeline: [`DESIGN.md` §5](DESIGN.md).
+
+---
+
+## Contributing
+
+HakOS is open source and welcomes contributors.  
+If you're interested in OS development, Rust, or AI, feel free to:
+
+- Open an issue for discussion or bug reports
+- Submit pull requests (code, docs, tests)
+- Star the repository to show support
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) (coming soon) for guidelines.
+
+---
+
+## License
+
+MIT License – built in public, for everyone.
+
+---
+
+**Built by one developer + AI** – a middle school student exploring what's possible when you combine modern tools with a bold vision.
+
+---
+
+*HakOS is in early concept / development phase. Stars, issues, and constructive feedback are welcome.*
